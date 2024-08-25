@@ -56,8 +56,109 @@ function insert(root, x) {
     }
     return root;
 }
-let tree = new Tree([1,2,3,4]);
+function minValue(node) {
+    let minVal = node.data;
+    while (node.left !== null) {
+        minVal = node.left.data;
+        node = node.left;
+    }
+    return minVal;
+}
+function deleteData(root, x) {
+    if (root === null) {
+        return root;
+    }
+    if (root.data > x) {
+        root.left = deleteData(root.left, x);
+    }
+    else if (root.data < x) {
+        root.right = deleteData(root.right, x);
+    }
+    else {
+        if (root.left === null) {
+            return root.right;
+        }
+        else if (root.right === null) {
+            return root.left;
+        }
+        else {
+            root.data = minValue(root.right);
+            root.right = deleteData(root.right, root.data);
+        }
+    }
+    return root;
+}
+function find(root, x) {
+    if (root === null) {
+        return false;
+    }
+    if (root.data === x) {
+        return root;
+    }
+    else if (root.data < x) {
+        return find(root.right, x);
+    }
+    else if(root.data > x) {
+        return find(root.left, x);
+    }
+    
+    
+}
+function levelOrder(root, callback = null) {
+    if (callback === null || callback === undefined) {
+        throw new Error('Callback is not defined!');
+    }
+    if (root === null) {
+        return [];
+    }
+    let queue = [];
+    let result = [];
+    queue.push(root);
+
+    while (queue.length > 0) {
+        let node = queue.shift();
+        if (callback) {
+            let children = callback(node);
+            for (let child of children) {
+                queue.push(child);
+            }
+        }
+        result.push(node.data);
+    
+    }
+    // enqueueNodes(queue[0]).filter(item => {
+    //     queue.push(item)
+    // })
+    // traversed.push(queue.shift());
+
+    
+    // levelOrder(queue[0])
+    return result;
+}
+function enqueueNodes(node) {
+    let arr = []
+    if (node.left !== null) {
+        arr.push(node.left);
+    } 
+    if (node.right !== null) {
+        arr.push(node.right);
+    }
+    return arr;
+  
+}
+
+let tree = new Tree([1,2,3,4,5,6]);
+let emptyTree = new Tree();
 tree.root = insert(tree.root, 7);
+tree.root = insert(tree.root, 9);
+tree.root = deleteData(tree.root, 7);
 console.log(tree.root)
 prettyPrint(tree.root)
+let traversalResult; 
+try {
+    traversalResult = levelOrder(tree.root, enqueueNodes);
+} catch (e) {
+    console.error(e)
+}
+console.log(traversalResult)
 // console.log(tree.root);
