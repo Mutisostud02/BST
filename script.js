@@ -146,6 +146,49 @@ function enqueueNodes(node) {
     return arr;
   
 }
+function addToArr() {
+   let arr = [];
+   return arr;
+}
+function inOrderTraversal(root, callback) {
+    if (root === null) {
+        return root;
+    }
+    let queue = [];
+    let current = root;
+    let addToQueue = callback();
+   while (current !== null || queue.length > 0) {
+    while (current !== null) {
+        queue.push(current);
+        current = current.left;
+    }
+    current = queue.pop();
+    addToQueue.push(current.data);
+    current = current.right;
+   }
+   return addToQueue;
+}
+ 
+function preOrder(root, callback) {
+    if (root === null) {
+        return root;
+    }
+    let current = root;
+    let queue = [];
+    let addToQueue = callback();
+    while (current !== null || queue.length > 0) {
+        while (current !== null) {
+            queue.push(current)
+            current = current.left;
+        }
+        current = queue.shift();
+        addToQueue.push(current.data);
+        current = current.right;
+    }
+    return addToQueue;
+}
+
+
 
 let tree = new Tree([1,2,3,4,5,6]);
 let emptyTree = new Tree();
@@ -160,5 +203,8 @@ try {
 } catch (e) {
     console.error(e)
 }
-console.log(traversalResult)
+// console.log(traversalResult)
 // console.log(tree.root);
+// let inOT = inOrderTraversal(tree.root, addToArr);
+let pOT = preOrder(tree.root, addToArr);
+console.log(pOT)
