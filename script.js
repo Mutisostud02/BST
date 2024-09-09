@@ -187,7 +187,71 @@ function preOrder(root, callback) {
     }
     return addToQueue;
 }
+function postOrderTrav(root) {
+    if (root === null) {
+        return root;
+    }
+    let arr = [];
+    function traverse(node) {
+        if (node === null) {
+            return;
+        }
+        traverse(node.left)
+        traverse(node.right)
+        arr.push(node.data);
+    }
+    traverse(root);
+    return arr;
+    
+}
+function height(node) {
+    if(node === null) {
+        return -1;
+    }
+    let leftHeight = height(node.left);
+    let rightHeight = height(node.right);
+    return Math.max(leftHeight, rightHeight) + 1;
 
+}
+function depth(root, node) {
+    if (root === null) {
+        return -1; 
+    }
+    if (root.data === node.data) {
+        return 0; 
+    }
+    let leftDepth = depth(root.left, node);
+    let rightDepth = depth(root.right, node);
+    if (leftDepth !== -1) {
+        return leftDepth + 1;
+    }
+    if (rightDepth !== -1) {
+        return rightDepth + 1;
+    }
+    return -1;
+}
+function isBalanced(root) {
+    if(root === null) {
+        return -1;
+    }
+    let leftHeight = height(root.left);
+    let rightHeight = height(root.right);
+
+    if (Math.abs(leftHeight - rightHeight) < 2) {
+        return "Is balanced -> " + true;
+    }
+    return "Is balanced -> " + false;
+
+}
+
+function rebalance(root) {
+    let treeData = preOrder(root, addToArr);
+    treeData.sort((a, b) => {
+        return a - b;
+    })
+    let newTree = new Tree(treeData);
+    return newTree;
+}
 
 
 let tree = new Tree([1,2,3,4,5,6]);
@@ -206,5 +270,23 @@ try {
 // console.log(traversalResult)
 // console.log(tree.root);
 // let inOT = inOrderTraversal(tree.root, addToArr);
-let pOT = preOrder(tree.root, addToArr);
-console.log(pOT)
+// let preOT = preOrder(tree.root, addToArr);
+// console.log(preOT)
+// let poOT = postOrderTrav(tree.root)
+// console.log(poOT)
+// let nodeToFind = find(tree.root, 6);
+// if (nodeToFind) {
+//     let heightOfNode = height(nodeToFind);
+//     console.log(heightOfNode)    
+// } else {
+//     console.log(`Node with value not found.`)
+// }
+
+// if (nodeToFind) {
+//     let depthOfNode = depth(tree.root, nodeToFind);
+//     console.log(depthOfNode);
+// }
+let isBal = isBalanced(tree.root);
+console.log(isBal)
+let reBal = rebalance(tree.root);
+console.log(reBal)
